@@ -1,4 +1,4 @@
-# Day- 2 Server Basics
+# Day- 2 Django Basics
 
 The syllabus and the asserssment for the session is in this [docs](https://docs.google.com/document/d/1hAE8tr56tLtnMrA4ttCCNuSPG5nQQA_6Gr0vt2Fk_6w/edit?tab=t.0)
 
@@ -143,6 +143,9 @@ Day2Servers
 
 ## Assessments
 
+**Initial bash code**: The initial bash code as:
+![alt text](Screenshots/1.png)
+
 ### 1️⃣ Creation
 
 1. **Create 10 Users via bulk_create.**
@@ -166,24 +169,311 @@ User.objects.bulk_create(users)
 
 ```
 
-![alt text]("")
+![alt text](Screenshots/2.png)
 
-2. Create user with create
+2. **Create user with create**
 
 ```bash
 user = User.objects.create(first_name="Ranjan", last_name="Lamsal", email="Ranjan@ramailo.tech")
 ```
 
-3. Use get_or_create() for a user with email "unique@test.com".
+![alt text](Screenshots/3.png)
+
+3. **Use get_or_create() for a user with email "unique@test.com".**
 
 ```bash
 user = User.objects.get_or_create(email="unique@test.com", defaults={"first_name": "Unique", "last_name": "User"})
 
 ```
 
-4. Use update_or_create() to change first_name for "unique@test.com".
+![alt text](Screenshots/4.png)
+
+4. **Use update_or_create() to change first_name for "unique@test.com"**
 
 ```bash
 user = User.objects.update_or_create(email="unique@test.com", defaults={"first_name": "UpdatedUnique", "last_name": "User"})
+```
+
+![alt text](Screenshots/5.png)
+
+### 2️⃣ Basic Retrieval
+
+5. **Retrieve all users**
+
+```bash
+User.objects.all()
+```
+
+![alt text](Screenshots/6.png)
+
+6. **Get the first and last user**
+
+```bash
+User.objects.all()[0] #First user
+l = len(User.objects.all()) #number of users to determine last index
+User.objects.all()[l-1] #Last user
+```
+
+![alt text](Screenshots/7.png)
+
+7. **Fetch user by primary key with error handling (catch DoesNotExist)**
+
+```bash
+from django.core.exceptions import ObjectDoesNotExist
+try:
+   user = User.objects.get(pk=1)
+   print(user)
+except ObjectDoesNotExist:
+   print("User with the specified primary key does not exist.")
+
+# Output: Alice Smith
+try:
+   user = User.objects.get(pk=7)
+   print(user)
+except ObjectDoesNotExist:
+  print("User with the specified primary key does not exist.")
+
+# Output: Grace Miller
+try:
+   user = User.objects.get(pk=20)
+   print(user)
+except ObjectDoesNotExist:
+   print("User with the specified primary key does not exist.")
+
+# Output: User with the specified primary key does not exist.
+```
+
+![alt text](Screenshots/8.png)
+
+8. **Check if any user exists with email containing "gmail.com"**
+
+```bash
+gmail_exists = User.objects.filter(email__icontains="gmail.com").exists()
+print(gmail_exists)
+```
+
+![alt text](Screenshots/9.png)
+
+### 3️⃣ Filtering & Lookups
+
+9. **Filter users whose first_name starts with "A".**
+
+```bash
+user_with_A = User.objects.filter(first_name__startswith="A")
+print(user_with_A)
+```
+
+![alt text](Screenshots/10.png)
+
+10. **Filter users whose last_name ends with "son".**
+
+```bash
+user_endwith_son_in_last_name = User.objects.filter(last_name__endswith="son")
+print(user_endwith_son_in_last_name)
+```
+
+![alt text](Screenshots/11.png)
+
+11. **Filter users with email contains "example".**
+
+```bash
+user_with_example_email = User.objects.filter(email__icontains="example")
+print(user_with_example_email)
+```
+
+![alt text](Screenshots/12.png)
+
+12. **Exclude users whose email ends with "@test.com".**
+
+```bash
+user_without_test_email = User.objects.exclude(email__endswith="@test.com")
+print(user_without_test_email)
+```
+
+![alt text](Screenshots/13.png)
+
+13. **Filter by a list of last_names (\_\_in).**
+
+```bash
+last_names = ['Smith', 'Johnson', 'Brown']
+users = User.objects.filter(last_name__in=last_names)
+print(list(users))
+```
+
+![alt text](Screenshots/14.png)
+
+14. **Combine OR conditions using Q (first_name startswith “J” OR last_name contains “Smith”).**
+
+```bash
+user_with_A_or_smith = User.objects.filter(Q(first_name__startswith="J") | Q(last_name__icontains="Smith"))
+print(user_with_A_or_smith)
+```
+
+![alt text](Screenshots/15.png)
+
+### 4️⃣ Ordering, Slicing & Counts
+
+15. **Order by last_name ascending, then first_name descending.**
+
+```bash
+user_orderby_l_name_asc = User.objects.all().order_by('last_name') #ascending order by last name
+print(user_orderby_l_name_asc)
+
+user_orderby_f_name_desc = User.objects.all().order_by('-first_name') #descending order by first name
+print(user_orderby_f_name_desc)
+```
+
+![alt text](Screenshots/16.png)
+![alt text](Screenshots/17.png)
+
+16. **Slice to retrieve users 3–6.**
+
+```bash
+users_sliced = User.objects.all()[2:6]
+print(users_sliced)
+```
+
+![alt text](Screenshots/18.png)
+
+17. **Count total users; count distinct last names.**
+
+```bash
+num_total_users = len(User.objects.all())
+print(f"Total number of users is : {num_total_users}")
+
+num_distinct_last_names = User.objects.values('last_name').distinct().count()
+print(f"There are {num_distinct_last_names} distinct last names of users so far.")
+```
+
+![alt text](Screenshots/20.png)
+
+18. **Use .exists() to verify if any user remains after deleting a subset.**
+
+```bash
+#First lets delete subset of users with "Test" in first name
+User.objects.filter(first_name="Test").delete()
+users_remain = User.objects.exists()
+print(users_remain)
+```
+
+![alt text](Screenshots/21.png)
+
+### 5️⃣ Aggregation & Annotation
+
+19. **Aggregate → total count, max and min id.**
+
+```bash
+from django.db.models import Count, Max, Min
+
+aggregation = User.objects.aggregate(
+    total_count=Count('id'),
+    max_id=Max('id'),
+    min_id=Min('id')
+)
+print(aggregation)
 
 ```
+
+![alt text](Screenshots/22.png)
+
+20. **Annotate each user with a computed full_name (Concat).**
+
+```bash
+from django.db.models import F, Value
+from django.db.models.functions import Concat
+
+users_with_full_name = User.objects.annotate(
+    full_name=Concat(F('first_name'), Value(' '), F('last_name'))
+)
+
+for user in users_with_full_name:
+    print(user.full_name)
+```
+
+![alt text](Screenshots/23.png)
+
+21. **Annotate each user with length of email (Length).**
+
+```bash
+from django.db.models.functions import Length
+
+users_with_email_length = User.objects.annotate(
+    email_length=Length('email')
+)
+for user in users_with_email_length:
+    print(f'email: {user.email}, email_length: {user.email_length}')
+```
+
+![alt text](Screenshots/24.png)
+
+22. **Group by last_name and return last_name + count of users sharing it.**
+
+```bash
+users_grouped_by_last_name = User.objects.values('last_name').annotate(
+    user_count=Count('id')
+).order_by('last_name')
+
+for group in users_grouped_by_last_name:
+    print(group)
+```
+
+![alt text](Screenshots/25.png)
+
+### 6️⃣ Updates
+
+23. **Update all users’ last_name to uppercase using update() + Upper(F('last_name'))**
+
+```bash
+User.objects.update(last_name=Upper(F('last_name')))
+#Output is integer (The update() method returns the count of rows modified.)
+```
+
+![alt text](Screenshots/26.png)
+
+24. **Bulk‑update a slice of users to change email domain (use bulk_update)**
+
+```bash
+users_to_update = User.objects.filter(id__in=range(3, 7)) #slice of users
+
+for user in users_to_update:
+    user.email = user.email.replace('@example.com', '@example_updated.com')
+
+User.objects.bulk_update(users_to_update, ['email'])
+
+emails = User.objects.values_list('email', flat=True)
+print(list(emails))
+```
+
+![alt text](Screenshots/27.png)
+
+25. **Use update_or_create() again to add a missing field value**
+
+```bash
+user, created = User.objects.update_or_create(
+    first_name='Bob',
+    defaults={'last_name': 'WILSON', 'email': 'sam.wilson@example.com'}
+)
+```
+
+![alt text](Screenshots/28.png)
+Here we first find the user with name Bob and then changed the last_name and email as the user exists.
+
+### 7️⃣ Deletion
+
+26. **Delete users whose first_name contains "test"**
+
+```bash
+user_to_delete = User.objects.filter(first_name__icontains="test")
+user_to_delete.delete()
+```
+
+![alt text](Screenshots/29.png)
+Here we first created a user with first name "test" and then delete the user having first_name "test"
+
+27. **Delete all remaining users in one QuerySet call**
+
+```bash
+User.objects.all().delete()
+```
+
+![alt text](Screenshots/29.png)
