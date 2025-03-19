@@ -48,3 +48,65 @@ class User(models.Model):
             return False
         user.delete()
         return True
+    
+
+#Just implementing different Django Model fields 
+
+class UserProfile(models.Model):
+    # CharacterField
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
+    # IntegerField
+    age = models.IntegerField()
+
+    # EmailField
+    email = models.EmailField(unique=True)
+
+    # DateField
+    date_of_birth = models.DateField()
+
+    # TimeField
+    last_login_time = models.TimeField()
+
+    # DateTimeField
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # BooleanField
+    is_active = models.BooleanField(default=True)
+
+    # DecimalField
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # FloatField
+    height = models.FloatField()
+
+    # URLField
+    profile_picture_url = models.URLField()
+
+    # ImageField
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+    # ForeignKey
+    country = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True)
+
+    # ManyToManyField
+    hobbies = models.ManyToManyField('Hobby')
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+# Referenced models
+
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Hobby(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
