@@ -532,3 +532,13 @@ users = User.objects.only('first_name', 'last_name')
 ```
 
 ![alt text](Screenshots/35.png)
+
+### Assessment- Data type implementation in django models
+
+Please refer to the models.py in User app to see the implementation of different fields in a dummy model created.
+
+### Assessment- Different use cases of `@classmethod`, `@staticmethod` and `@property` decorators while working with models in django.
+
+- `@classmethod` is typically used in cases where we need operations that deal with bulk operations, alternative constructors, or other class-level data.
+- `@staticmethod` is often used for utility functions that don’t require access to any instance or class state, like validation or password generation in this example.
+- `@property` is perfect for calculated attributes, where you want to provide an attribute-like interface but with dynamically computed values.
