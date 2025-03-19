@@ -476,4 +476,59 @@ Here we first created a user with first name "test" and then delete the user hav
 User.objects.all().delete()
 ```
 
-![alt text](Screenshots/29.png)
+![alt text](Screenshots/30.png)
+
+### 8️⃣ Query Inspection
+
+28. **execute query to select users with first_name starting with "A"**
+
+```bash
+users = User.objects.filter(first_name__startswith='A')
+```
+
+![alt text](Screenshots/32.png)
+
+### 9️⃣ Transactions & Error Handling
+
+29. **Within transaction.atomic(), attempt to create two users — force a duplicate‑email IntegrityError and show rollback**
+
+```bash
+try:
+    with transaction.atomic():
+        user1 = User.objects.create(first_name="John", last_name="Doe", email="duplicate@example.com")
+        print("User 1 created:", user1)
+
+        user2 = User.objects.create(first_name="Jane", last_name="Doe", email="duplicate@example.com")
+        print("User 2 created:", user2)
+
+except IntegrityError as e:
+    print("IntegrityError occurred. Transaction is rolled back:", str(e))
+```
+
+![alt text](Screenshots/33.png)
+
+30. **Catch and print the IntegrityError when manually creating a duplicate**
+
+```bash
+try:
+   user1 = User.objects.create(first_name="Alice", last_name="Smith", email="duplicate@example.com")
+   print("User 1 created:", user1)
+
+   user2 = User.objects.create(first_name="Bob", last_name="Johnson", email="duplicate@example.com")
+   print("User 2 created:", user2)
+
+except IntegrityError as e:
+   print("IntegrityError occurred:", str(e))
+```
+
+![alt text](Screenshots/34.png)
+
+### 🔟 Performance & Meta
+
+31. **Fetch only first_name + last_name using .only()**
+
+```bash
+users = User.objects.only('first_name', 'last_name')
+```
+
+![alt text](Screenshots/35.png)

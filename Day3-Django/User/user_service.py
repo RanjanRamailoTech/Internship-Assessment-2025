@@ -20,3 +20,4 @@ class UserService:
     @staticmethod
     def delete_user(user_id):
         return User.delete_user(user_id)
+
