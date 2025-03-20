@@ -10,6 +10,7 @@ The syllabus and the asserssment for the session is in this [docs](https://docs.
 - Model, serializer, and viewset for a basic user API
 - CRUD operations with Django REST Framework
 - Common edge cases and troubleshooting
+- Quering using python shell
 
 ---
 
