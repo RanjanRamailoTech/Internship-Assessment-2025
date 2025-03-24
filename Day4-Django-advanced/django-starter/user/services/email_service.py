@@ -11,7 +11,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 class EmailService:
     @staticmethod
     def send_verification_email(user, request):
-        token = AuthService.generate_token(user)["access"]  # Use access token as verification token
+        token = AuthService.generate_token(user)["access"]
         verification_link = request.build_absolute_uri(
             reverse("verify-email", kwargs={"token": token})
         )

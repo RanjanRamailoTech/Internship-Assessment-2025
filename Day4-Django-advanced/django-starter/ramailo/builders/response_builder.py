@@ -40,7 +40,11 @@ class ResponseBuilder(object):
     def ok_200(self):
         self.status = status.HTTP_200_OK
         return self
-
+    
+    def created_201(self):
+        self.status = status.HTTP_201_CREATED
+        return self
+    
     def accepted_202(self):
         self.status = status.HTTP_202_ACCEPTED
         return self

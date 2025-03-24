@@ -39,6 +39,7 @@ pytest-django = "^4.5.2"
 factory-boy = "^3.3.0"
 setuptools = "^68.2.2"
 python-decouple = "^3.8"
+django-crontab = "^0.7.1"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.3.1"

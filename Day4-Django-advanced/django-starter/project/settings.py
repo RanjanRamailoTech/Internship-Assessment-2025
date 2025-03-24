@@ -29,6 +29,9 @@ AWS_SES_EMAIL = EMAIL_HOST_USER
 
 # Application definition
 INSTALLED_APPS = [
+    'django_crontab',
+    'user.apps.UserConfig',
+    'stock.apps.StockConfig',
     'ramailo.apps.RamailoConfig',
     'rest_framework',
     'drf_yasg',
@@ -41,7 +44,6 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'django_extensions',
-    'user',
 ]
 
 
@@ -96,11 +98,10 @@ DATABASES = {
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
-
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config('REDIS_URL', default='redis://localhost:6379/0'),
+        "LOCATION": "redis://localhost:6379/1",  # Same as CELERY_BROKER_URL
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -183,6 +184,10 @@ SWAGGER_SETTINGS = {
     },
     'USE_SESSION_AUTH': False
 }
+
+CRONJOBS = [
+    ('* * * * *', 'stock.management.commands.fetch_stock_data.Command'),
+]
 
 ENV_ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 ALLOWED_HOSTS = ENV_ALLOWED_HOSTS.split(',') if ENV_ALLOWED_HOSTS is not None else []

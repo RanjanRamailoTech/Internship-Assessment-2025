@@ -11,11 +11,10 @@ class BaseModel(models.Model):
 
 
 class User(BaseModel):
-    name = models.CharField(max_length=255, blank=True, default="")
-    email = models.CharField(max_length=128, unique=True, blank=True, default="")
+    name = models.CharField(max_length=255, blank=False)
+    email = models.CharField(max_length=128, unique=True, blank=False)
     is_email_verified = models.BooleanField(default=False)
-    user_created_at = models.DateTimeField(auto_now_add=True)  # Renamed for clarity
-
+    
     def __str__(self):
         return f"{self.name} - {self.email}"
 
