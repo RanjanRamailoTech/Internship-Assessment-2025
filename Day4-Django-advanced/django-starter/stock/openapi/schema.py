@@ -73,3 +73,29 @@ STOCK_DETAIL_API = {
         )
     }
 }
+
+FETCH = {
+    "operation_description": "Fetch and update current stock data from external source.",
+    "responses": {
+        201: openapi.Response(
+            description="Stock data updated",
+            examples={
+                "application/json": {
+                    "status-code": 1,
+                    "status-message": "",
+                    "data": {"message": "Stock data updated"}
+                }
+            }
+        ),
+        500: openapi.Response(
+            description="Fetch failed",
+            examples={
+                "application/json": {
+                    "status-code": -1,
+                    "status-message": "",
+                    "data": {"message": "Connection error"}
+                }
+            }
+        )
+    }
+}
