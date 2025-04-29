@@ -13,7 +13,7 @@ class EmailService:
     def send_verification_email(user, request):
         token = AuthService.generate_token(user)["access"]
         verification_link = request.build_absolute_uri(
-            reverse("verify-email", kwargs={"token": token})
+            reverse("verifyemail")
         )
         receiver = [user.email]
         template = "email_verification_link_template.html"
