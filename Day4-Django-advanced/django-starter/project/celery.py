@@ -11,16 +11,22 @@ app = Celery('project')
 # Load configuration from Django settings with CELERY_ prefix
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Debug: Print the broker URL to verify
-print("CELERY_BROKER_URL from settings:", getattr(settings, 'CELERY_BROKER_URL', 'Not found'))
 
-# Auto-discover tasks
+# Load task modules from all registered Django app configs.
 app.autodiscover_tasks([
-    "ramailo.tasks.ramailo_tasks",
-    "user.tasks",
+    "stock.tasks.stock_tasks"
 ])
 
-# Optional debug task
-@app.task(bind=True, ignore_result=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')
+app.conf.broker_transport_options = {
+    'max_retries': 2,
+    'interval_start': 0,
+    'interval_step': 0.2,
+    'interval_max': 0.2,
+}
+
+app.conf.beat_schedule = {
+    'execute_ramailo_task_in_every_2_min': {
+        'task': 'execute_stock_task',
+        'schedule': 1 * 60   # Run every 2 min
+    },
+}
