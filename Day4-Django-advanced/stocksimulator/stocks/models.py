@@ -9,11 +9,11 @@ class Company(models.Model):
 class StockPrice(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     price = models.FloatField()
-    timestamp = models.DateTimeField(auto_now_add=True)  # For tracking when data is added
-    sequence = models.IntegerField()  # To maintain order of stock prices
+    timestamp = models.DateTimeField(auto_now_add=True)
+    sequence = models.IntegerField()
 
     class Meta:
-        unique_together = ('company', 'sequence')  # Ensure unique sequence per company
+        unique_together = ('company', 'sequence')  # Fix: Use 'company' instead of 'id'
 
     def __str__(self):
         return f"{self.company.name} - {self.price} at {self.timestamp}"
