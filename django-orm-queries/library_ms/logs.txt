@@ -1,0 +1,43 @@
+ranjan@ranjan-space:~/Projects/RT/Assessments/Internship-Assessment-2025/django-orm-queries$ source env/bin/activate
+(env) ranjan@ranjan-space:~/Projects/RT/Assessments/Internship-Assessment-2025/django-orm-queries$ ls
+env  library_ms
+(env) ranjan@ranjan-space:~/Projects/RT/Assessments/Internship-Assessment-2025/django-orm-queries$ cd library_ms/
+(env) ranjan@ranjan-space:~/Projects/RT/Assessments/Internship-Assessment-2025/django-orm-queries/library_ms$ ls
+db.sqlite3  library  library_ms  manage.py  populate_db.py
+(env) ranjan@ranjan-space:~/Projects/RT/Assessments/Internship-Assessment-2025/django-orm-queries/library_ms$ python manage.py shell
+10 objects imported automatically (use -v 2 for details).
+
+Python 3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> Author.objects.order_by('-full_name').values_list('full_name', flat=True)
+<QuerySet ['Stacy Romero', 'Ryan Meyer', 'Mary Carter', 'Lindsey Lewis', 'Jessica Contreras', 'J.K. Rowling', 'Grace Adams', 'Charles Carey', 'Anthony Bailey', 'Anne Bennett', 'Alexander Arnold']>
+>>> 
+>>> 
+>>> Author.objects.order_by('-full_name').values_list('full_name', flat=True)
+<QuerySet ['Stacy Romero', 'Ryan Meyer', 'Mary Carter', 'Lindsey Lewis', 'Jessica Contreras', 'J.K. Rowling', 'Grace Adams', 'Charles Carey', 'Anthony Bailey', 'Anne Bennett', 'Alexander Arnold']>
+
+>>> from django.db.models import Avg
+>>> Author.objects.annotate(
+...     avg_pub_year=Avg('books__published_on__year')
+... ).order_by('-avg_pub_year')[:3].values('full_name', 'avg_pub_year')
+<QuerySet [{'full_name': 'Lindsey Lewis', 'avg_pub_year': 2015.5}, {'full_name': 'Alexander Arnold', 'avg_pub_year': 2013.6666666666667}, {'full_name': 'Anthony Bailey', 'avg_pub_year': 2012.5}]>
+>>> 
+>>> 
+>>> from django.db.models import Count
+>>> 
+>>> Author.objects.annotate(
+...     book_count=Count('books')
+... ).filter(book_count__lte=2).values('full_name', 'book_count')
+<QuerySet [{'full_name': 'Anne Bennett', 'book_count': 1}, {'full_name': 'Stacy Romero', 'book_count': 1}, {'full_name': 'Anthony Bailey', 'book_count': 2}, {'full_name': 'Lindsey Lewis', 'book_count': 2}]>
+>>> 
+
+>>> 
+>>> from django.db.models.functions import Length
+>>> Book.objects.annotate(
+...     title_length=Length('title')
+... ).order_by('-title_length')[:5].values('title', 'title_length')
+<QuerySet [{'title': 'May public administration their day floor ground choose.', 'title_length': 56}, {'title': 'Same west heart make agent million politics feel law.', 'title_length': 53}, {'title': 'Son first leave feeling article election collection.', 'title_length': 52}, {'title': 'Economic central budget few reason forward history.', 'title_length': 51}, {'title': 'Wind hear oil throw friend friend which or ahead.', 'title_length': 49}]>
+>>> 
+
+
